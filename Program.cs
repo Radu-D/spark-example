@@ -34,7 +34,7 @@ namespace SparkExample
             sparkConf.Set("spark.hadoop.google.cloud.auth.service.account.enable", "true");
             sparkConf.Set("spark.hadoop.google.cloud.auth.service.account.json.keyfile", "/Users/radud/Documents/Clinia/SparkExample/key.json");//"../../../key.json");
             sparkConf.Set("spark.sql.caseSensitive", "true");
-            sparkConf.Set("write.data.path", "s3://clinia-data-lake/resources_bronze_test.db/");
+            //sparkConf.Set("write.data.path", "s3://clinia-data-lake/resources_bronze_test.db/");
             sparkConf.Set("spark.driver.extraClassPath", "./");
 
             var spark = SparkSession
@@ -65,15 +65,23 @@ namespace SparkExample
                 .ToDF("raw"); //, "mapped", "timestamp", "meta");
             
             df.Show();
-            df
-                .Write()
-                //.Mode("append")
-                .Mode("overwrite")
-                //.Parquet("nom_fichier05.parquet");
-                //.Format("iceberg")
-                .Format("parquet")
-                //.Parquet("s3://clinia-data-lake/resources_bronze_test.db");
-                .Save("s3://clinia-data-lake/resources_bronze_test.db");
+            // df
+            //     .Write()
+            //     //.Mode("append")
+            //     .Mode("overwrite")
+            //     //.Parquet("nom_fichier05.parquet");
+            //     .Format("iceberg")
+            //     //.Format("parquet")
+            //     //.Parquet("s3://clinia-data-lake/resources_bronze_test.db");
+            //     .Save("s3://clinia-data-lake/resources_bronze_test.db");
+
+            spark.Sql("CREATE DATABASE IF NOT EXISTS resources_bronze_test");
+            
+            df.Write()
+                //.Mode("overwrite")
+                .Format("iceberg")
+                .SaveAsTable("resources_bronze_test.brunet");
+                //.Save("resources_bronze_test.brunet");
 
             // Write data to the Iceberg table in streaming mode.
             // var query = df.WriteStream()
