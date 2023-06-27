@@ -25,3 +25,5 @@
 /Users/radud/Documents/Clinia/SparkExample/bin/Debug/net6.0/Razorvine.Pyrolite.dll
 /Users/radud/Documents/Clinia/SparkExample/bin/Debug/net6.0/Razorvine.Serpent.dll
 /Users/radud/Documents/Clinia/SparkExample/obj/Debug/net6.0/SparkExample.csproj.CopyComplete
+/Users/radud/Documents/Clinia/SparkExample/bin/Debug/net6.0/Dapper.dll
+/Users/radud/Documents/Clinia/SparkExample/bin/Debug/net6.0/TrinoClient.dll

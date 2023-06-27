@@ -5,10 +5,13 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.0.123" />
       <PackageReference Include="Microsoft.Spark" Version="2.1.1" />
+      <PackageReference Include="TrinoClient" Version="0.1.1" />
     </ItemGroup>
 
 </Project>

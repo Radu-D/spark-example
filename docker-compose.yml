@@ -1,0 +1,11 @@
+﻿services:
+  spark:
+    image: ghcr.io/clinia/vendor/apache/spark-docker/spark:3.3.1-scala2.12-java11-python3-ubuntu-iceberg1.2.1
+    environment:
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+    ports:
+      - 4040:4040
+    volumes:
+      - ./:/opt/spark/conf
