@@ -22,17 +22,12 @@ namespace SparkExample
 
         private static void MakeABrunetTableUsingSpark()
         {
-            #region Spark
-
             var sparkConf = new SparkConf();
-
-            #region data_sor config
-
+            
+            // data_sor config
             sparkConf.Set("spark.master", "local[*]");
             sparkConf.Set("spark.driver.memory", "30g");
-            //sparkConf.Set("spark.driver.host", "127.0.0.1");
-            sparkConf.Set("spark.driver.host", "192.168.1.201"); 
-            sparkConf.Set("spark.driver.port", "50148");
+            sparkConf.Set("spark.driver.host", "127.0.0.1");
             sparkConf.Set("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions");
             sparkConf.Set("spark.sql.defaultCatalog", "lakehouse");
             sparkConf.Set("spark.sql.catalog.lakehouse", "org.apache.iceberg.spark.SparkCatalog");
@@ -41,83 +36,34 @@ namespace SparkExample
             sparkConf.Set("spark.sql.catalog.lakehouse.warehouse", "s3://clinia-data-lake");
             sparkConf.Set("spark.hadoop.fs.s3.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem");
             sparkConf.Set("spark.hadoop.google.cloud.auth.service.account.enable", "true");
-            //sparkConf.Set("spark.hadoop.google.cloud.auth.service.account.json.keyfile", "/opt/docker/gcp/key.json");
             sparkConf.Set("spark.hadoop.google.cloud.auth.service.account.json.keyfile", "/Users/radud/Documents/Clinia/SparkExample/key.json");//"../../../key.json");
             sparkConf.Set("spark.sql.caseSensitive", "true");
             sparkConf.Set("spark.driver.extraClassPath", "./");
-            sparkConf.Set("write.data.path", "s3://clinia-data-lake/resources_bronze_test.db/");
 
-            #endregion
-            
             var spark = SparkSession
                 .Builder()
                 .Master("local[*]")
-                // .Master("192.168.2.195:49571")
-                // .Master("spark://ca1df3e51fb2:7077")
                 .AppName("connectors")
-                // .Config("spark.sql.extensions", "org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions")
                 .Config(sparkConf)
                 .EnableHiveSupport()
                 .GetOrCreate();
-            
+
             spark.SparkContext.SetLogLevel("ERROR");
             
             // Mock data from https://mockaroo.com/
-            // READ
             var df = spark
                 .Read()
-                // .Schema(new StructType(new List<StructField>
-                // {
-                //     new("raw", new StringType(), true, new JObject())
-                //     // new("mapped", new StringType(), true, new JObject()),
-                //     // new("timestamp", new StringType(), true, new JObject()),
-                //     // new("meta", new StringType(), true, new JObject())
-                // }))
-                //.Json("./brunetPharmacies.json");     // each key = column
-                .Text("./brunetPharmacies.json")
-                .ToDF(); //"raw", "mapped", "timestamp", "meta");
+                .Json("./brunetPharmacies.json"); // each key = column
             
-            //df.Show();
-            
-            // WRITE
-            // df
-            //     .Write()
-            //     //.Mode("append")
-            //     .Mode("overwrite")
-            //     //.Parquet("nom_fichier05.parquet");
-            //     .Format("iceberg")
-            //     //.Format("parquet")
-            //     //.Parquet("s3://clinia-data-lake/resources_bronze_test.db");
-            //     .Save("s3://clinia-data-lake/resources_bronze_test.db");
-            
-            spark.Sql("CREATE DATABASE IF NOT EXISTS resources_bronze_test");
-            
-            // WRITE TO TABLE
-            df.Write()
-                //.Mode("overwrite")
-                .Format("iceberg")
-                .SaveAsTable("resources_bronze_test.brunet");
-            //.Save("resources_bronze_test.brunet");
-            
-            // Write data to the Iceberg table in streaming mode.
-            // var query = df.WriteStream()
-            //     .Format("iceberg")
-            //     .OutputMode("append")
-            //     .Trigger(Trigger.ProcessingTime(TimeSpan.FromMinutes(1).Milliseconds))
-            //     .Option("path", "dlf_catalog.iceberg_db.iceberg_table")
-            //     .Option("checkpointLocation", "<checkpointPath>")
-            //     .Start();
-            //
-            // query.AwaitTermination();
-            
-            // var spark = SparkSession.Builder().AppName("Connectors").Config(new SparkConf()).Master("spark://ca1df3e51fb2:7077").GetOrCreate();
-            // var df = spark.Read().Json("brunetPharmacies.json");
-            // df.Show();
-            //var df = spark.CreateDataFrame();
-            //df.Show();
-            //df.Write().Parquet("nom_fichier.parquet");
+            df.Show();
 
-            #endregion
+            spark.Sql("CREATE DATABASE IF NOT EXISTS resources_bronze_test");
+            spark.Sql("CREATE TABLE IF NOT EXISTS resources_bronze_test.brunetv2");
+            
+            df.Write()
+                .Mode("overwrite")
+                .Format("iceberg")
+                .SaveAsTable("resources_bronze_test.brunetv2");
         }
 
         private static void TrinoInsert()
