@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Wed May 31 17:05:23 EDT 2023:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0188-73a1-3023-0000140a1568 
-on database directory /Users/radud/Documents/Clinia/SparkExample/metastore_db with class loader sun.misc.Launcher$AppClassLoader@54bedef2 
+Tue Jun 27 22:29:28 EDT 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-0188-ffd5-98b3-00000adb1518 
+on database directory /Users/radud/Documents/Clinia/SparkExample/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@1d3ae3ca 
 Loaded from file:/Applications/spark-3.2.1-bin-hadoop2.7/jars/derby-10.14.2.0.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_371-b11
 user.dir=/Users/radud/Documents/Clinia/SparkExample
 os.name=Mac OS X
 os.arch=x86_64
-os.version=13.3.1
+os.version=13.4.1
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
